@@ -17,8 +17,11 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->text('url');
-            $table->text('cache');
-            $table->text('screenshot');
+            $table->text('cache')->nullable();
+            $table->string('screenshot')->default('img/Untitled-1.png');
+            $table->boolean('wordpress_active');
+            $table->boolean('tracking')->default('1');
+            $table->boolean('active')->default('0');
             $table->timestamps();
         });
     }

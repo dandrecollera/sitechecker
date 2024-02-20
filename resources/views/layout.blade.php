@@ -8,6 +8,7 @@
     <title>Site Checker</title>
 
     <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
+    <script src="https://kit.fontawesome.com/55faa7e024.js" crossorigin="anonymous"></script>
 
     <style>
         img.card-img-top.dcc-image {
@@ -73,40 +74,6 @@
     </nav>
 
     @yield('content')
-
-
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add Website</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-
-                    <form action="">
-
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Website Title (ex:
-                                SampleSite)</label>
-                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Title">
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Website URL (ex:
-                                www.samplesite.com)</label>
-                            <input type="email" class="form-control" id="exampleFormControlInput1"
-                                placeholder="Web URL">
-                        </div>
-                        <div class="float-end">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-primary">Add</button>
-                        </div>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
 
