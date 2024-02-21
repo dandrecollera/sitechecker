@@ -3,11 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <title>Site Checker</title>
 
-    <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <script src="https://kit.fontawesome.com/55faa7e024.js" crossorigin="anonymous"></script>
 
     <style>
@@ -49,24 +49,22 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Site Checker</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                        <a aria-current="page" class="nav-link active" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                            style="cursor: pointer">Add Website</a>
+                        <a class="nav-link" data-bs-target="#exampleModal" data-bs-toggle="modal" style="cursor: pointer">Add Website</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Report</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link disabled" aria-disabled="true">Force</a>
+                        <a aria-disabled="true" class="nav-link disabled">Force</a>
                     </li>
                 </ul>
             </div>
@@ -75,7 +73,8 @@
 
     @yield('content')
 
-    <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script>
 
     @stack('jsscripts')
 
