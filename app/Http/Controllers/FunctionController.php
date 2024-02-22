@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
 
 class FunctionController extends Controller
 {
@@ -29,15 +30,36 @@ class FunctionController extends Controller
             1 => ['Website added successfully', 'info'],
             2 => ['Website modified successfully', 'info'],
             3 => ['Website removed', 'info'],
+            4 => ['List Updated', 'info'],
         );
         if(!empty($query['nt'])){
             $data['nt'] = $query['nt'];
         }
 
-        $data['sites'] = DB::table('sitelist')
-            ->orderBy('id', 'desc')
+        $data['order'] = array(
+            0 => ["Default", 'id'],
+            1 => ["Name", 'name'],
+            2 => ["Date", 'created_at'],
+            3 => ["Status", 'active'],
+        );
+        $data['or'] = 0;
+        if(!empty($query['or'])){
+            $data['or'] = $query['or'];
+        }
+
+        $data['srt'] = 'asc';
+        if(!empty($query['srt'])){
+            $data['srt'] = $query['srt'];
+        }
+
+        $sites = DB::table('sitelist');
+
+        $sites->orderBy($data['order'][$data['or']][1], $data['srt']);
+
+        $data['sites'] = $sites
             ->get()
             ->toArray();
+
 
         return view('home', $data);
     }
@@ -102,5 +124,59 @@ class FunctionController extends Controller
             ->delete();
 
         return redirect('?nt=3');
+    }
+
+    public function checkSiteStatus(Request $request){
+        $sites = DB::table('sitelist')->get();
+
+        foreach($sites as $site){
+            if($site->tracking == 1){
+                $res = Http::get($site->url);
+
+                if($res->successful()){
+                    $rawHtml = $res->body();
+
+                    $cleanHtml = strip_tags($rawHtml);
+                    $cleanHtml = preg_replace('/\s+/', ' ', $cleanHtml);
+
+                    $shortenedHtml = substr($cleanHtml, 0, 200);
+
+                    $status = 1;
+                } else {
+                    $status = 0;
+                }
+
+
+                $escapedUrl = escapeshellarg($site->url);
+                $scriptPath = base_path('node_scripts/screenshot.js');
+                $filename = 'screenshots/' . md5($site->url) . '_' . date('YmdHis') . '.png';
+                $storagePath = storage_path('app/public/' . $filename);
+
+                $directory = dirname($storagePath);
+                if (!file_exists($directory)) {
+                    mkdir($directory, 0777, true);
+                }
+
+                $command = "node $scriptPath $escapedUrl $storagePath";
+
+                exec($command, $output, $returnvar);
+
+                if($returnvar === 0){
+                    $publicpath = Storage::url($filename);
+                } else {
+                    $publicpath = asset('img/Untitled-1 cov.png');
+                }
+
+                DB::table('sitelist')
+                    ->where('id', $site->id)
+                    ->update([
+                        'active' => $status,
+                        'screenshot' => $publicpath,
+                        'updated_at' => Carbon::now()->toDateTimeString(),
+                    ]);
+            }
+        }
+
+        return redirect('?nt=4');
     }
 }

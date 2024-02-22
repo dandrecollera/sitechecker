@@ -18,17 +18,26 @@
         <div class="d-flex my-3">
             <div class="dropdown me-3">
                 <a aria-expanded="false" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
-                    Sort
-                </a>
-                <a class="btn btn-secondary">
-                    <i class="fa-solid fa-arrow-down-wide-short"></i>
-                    <i class="fa-solid fa-arrow-up-short-wide"></i>
+                    Sort: {{ $or == 0 ? 'Default' : $order[$or][0] }}
                 </a>
 
+                @if ($srt == 'asc')
+                    <a class="btn btn-secondary" href="/?or={{ $or }}&srt=desc">
+                        <i class="fa-solid fa-arrow-down-wide-short"></i>
+                        {{-- <i class="fa-solid fa-arrow-up-short-wide"></i> --}}
+                    </a>
+                @else
+                    <a class="btn btn-secondary" href="/?or={{ $or }}&srt=asc">
+                        <i class="fa-solid fa-arrow-up-short-wide"></i>
+                    </a>
+                @endif
+
+
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Name</a></li>
-                    <li><a class="dropdown-item" href="#">Date Added</a></li>
-                    <li><a class="dropdown-item" href="#">Status</a></li>
+                    <li><a class="dropdown-item" href="/?or=0&srt={{ $srt }}">Default</a></li>
+                    <li><a class="dropdown-item" href="/?or=1&srt={{ $srt }}">Name</a></li>
+                    <li><a class="dropdown-item" href="/?or=2&srt={{ $srt }}">Date Added</a></li>
+                    <li><a class="dropdown-item" href="/?or=3&srt={{ $srt }}">Status</a></li>
                 </ul>
             </div>
 
@@ -199,6 +208,25 @@
                     <div class="float-end">
                         <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
                         <a class="btn btn-danger" href="" id="delbutton">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="forcemodal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Force Fetch</h1>
+                    <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                </div>
+                <div class="modal-body">
+                    Force Fetch?<br>
+                    <br>
+                    <div class="float-end">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+                        <a class="btn btn-danger" href="forceFetch" id="delbutton">Fetch</a>
                     </div>
                 </div>
             </div>

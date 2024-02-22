@@ -55,7 +55,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a aria-current="page" class="nav-link active" href="/">Home</a>
+                        <a class="nav-link active" href="/">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-bs-target="#exampleModal" data-bs-toggle="modal" style="cursor: pointer">Add Website</a>
@@ -64,7 +64,7 @@
                         <a class="nav-link" href="#">Report</a>
                     </li>
                     <li class="nav-item">
-                        <a aria-disabled="true" class="nav-link disabled">Force</a>
+                        <a class="nav-link" data-bs-target="#forcemodal" data-bs-toggle="modal" style="cursor: pointer">Force</a>
                     </li>
                 </ul>
             </div>
