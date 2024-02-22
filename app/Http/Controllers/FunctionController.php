@@ -134,52 +134,85 @@ class FunctionController extends Controller
 
         foreach($sites as $site){
             if($site->tracking == 1){
-                $res = Http::get($site->url);
 
-                if($res->successful()){
-                    $status = 1;
+                try {
+                    $res = Http::get($site->url);
 
-                    $rawHtml = $res->body();
+                    if($res->successful()){
+                        $status = 1;
 
-                    $cleanHtml = $this->removeScriptsAndNonBodyContent($rawHtml);
+                        $rawHtml = $res->body();
 
-                    $shortenedHtml = substr($cleanHtml, 0, 200);
+                        $cleanHtml = $this->removeScriptsAndNonBodyContent($rawHtml);
 
-                    $publicpath = $site->screenshot;
+                        $shortenedHtml = substr($cleanHtml, 0, 200);
 
-                    if($shortenedHtml != $site->cache){
-                        $escapedUrl = escapeshellarg($site->url);
-                        $scriptPath = base_path('node_scripts/screenshot.js');
-                        $filename = 'screenshots/' . md5($site->url) . '_' . date('YmdHis') . '.png';
-                        $storagePath = storage_path('app/public/' . $filename);
+                        $publicpath = $site->screenshot;
 
-                        $directory = dirname($storagePath);
-                        if (!file_exists($directory)) {
-                            mkdir($directory, 0777, true);
+                        $changeState = 0;
+                        if($shortenedHtml != $site->cache){
+                            $changeState = 1;
+                            $escapedUrl = escapeshellarg($site->url);
+                            $scriptPath = base_path('node_scripts/screenshot.js');
+                            $filename = 'screenshots/' . md5($site->url) . '_' . date('YmdHis') . '.png';
+                            $storagePath = storage_path('app/public/' . $filename);
+
+                            $directory = dirname($storagePath);
+                            if (!file_exists($directory)) {
+                                mkdir($directory, 0777, true);
+                            }
+
+                            $command = "node $scriptPath $escapedUrl $storagePath";
+
+                            exec($command, $output, $returnvar);
+
+                            if($returnvar === 0){
+                                $publicpath = Storage::url($filename);
+                            } else {
+                                $publicpath = asset('img/Untitled-1 cov.png');
+                            }
                         }
 
-                        $command = "node $scriptPath $escapedUrl $storagePath";
+                        DB::table('sitelist')
+                            ->where('id', $site->id)
+                            ->update([
+                                'cache' => $shortenedHtml,
+                                'screenshot' => $publicpath,
+                                'active' => $status,
+                                'last_check' => Carbon::now()->toDateTimeString(),
+                                'last_change' => $changeState == 1 ? Carbon::now()->toDateTimeString() : $site->last_change,
+                                'updated_at' => Carbon::now()->toDateTimeString(),
+                            ]);
+                    } else {
+                        $status = 0;
+                        $count = $site->downcount;
+                        $count += 1;
 
-                        exec($command, $output, $returnvar);
-
-                        if($returnvar === 0){
-                            $publicpath = Storage::url($filename);
-                        } else {
-                            $publicpath = asset('img/Untitled-1 cov.png');
-                        }
+                        DB::table('sitelist')
+                            ->where('id', $site->id)
+                            ->update([
+                                'active' => $status,
+                                'last_down' => Carbon::now()->toDateTimeString(),
+                                'downcount' => $count,
+                                'updated_at' => Carbon::now()->toDateTimeString(),
+                            ]);
                     }
+                } catch (\Throwable $th) {
+                    $status = 0;
+                    $count = $site->downcount;
+                    $count += 1;
 
                     DB::table('sitelist')
                         ->where('id', $site->id)
                         ->update([
-                            'cache' => $shortenedHtml,
-                            'screenshot' => $publicpath,
                             'active' => $status,
+                            'last_down' => Carbon::now()->toDateTimeString(),
+                            'downcount' => $count,
                             'updated_at' => Carbon::now()->toDateTimeString(),
                         ]);
-                } else {
-                    $status = 0;
                 }
+
+
             }
         }
 

@@ -23,10 +23,10 @@ return new class extends Migration
             $table->boolean('tracking')->default('1');
             $table->boolean('active')->default('0');
 
-            // $table->dateTime('last_check')->nullable();
-            // $table->dateTime('last_change')->nullable();
-            // $table->dateTime('last_down')->nullable();
-
+            $table->dateTime('last_check')->nullable();
+            $table->dateTime('last_change')->nullable();
+            $table->dateTime('last_down')->nullable();
+            $table->integer('downcount')->default(0);
 
             $table->timestamps();
         });
