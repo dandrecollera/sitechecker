@@ -74,16 +74,16 @@
                             </p>
                             <div class="d-flex ">
 
-                                <a href="">
+                                <a href="changeTracking?id={{ $site->id }}">
                                     <i class="fa-solid fa-circle me-3 fa-lg" style="{{ $site->tracking == ' 1' ? 'color:green' : 'color:red' }}"></i>
                                 </a>
 
 
-                                <a href="">
+                                <a href="resetScreenshot?id={{ $site->id }}">
                                     <i class="fa-solid fa-image me-3 fa-lg" style="color:rgb(0, 0, 0)"></i>
 
                                 </a>
-                                <a href="">
+                                <a href="clearCache?id={{ $site->id }}">
                                     <i class="fa-solid fa-eraser me-3 fa-lg" style="color:rgb(0, 0, 0)"></i>
                                 </a>
 
