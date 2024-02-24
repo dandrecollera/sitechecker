@@ -61,7 +61,7 @@
                         <a class="nav-link" data-bs-target="#exampleModal" data-bs-toggle="modal" style="cursor: pointer">Add Website</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Report</a>
+                        <a class="nav-link" href="/report">Report</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-bs-target="#forcemodal" data-bs-toggle="modal" style="cursor: pointer">Force</a>

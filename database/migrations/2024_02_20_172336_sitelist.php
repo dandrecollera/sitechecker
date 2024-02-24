@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('url');
             $table->text('cache')->nullable();
-            $table->string('screenshot')->default('img/Untitled-1.png');
+            $table->string('screenshot')->default('img/Untitled-1 cov.png');
             $table->boolean('wordpress_active');
             $table->boolean('tracking')->default('1');
             $table->boolean('active')->default('0');

@@ -46,8 +46,19 @@
         <div class="row">
             @foreach ($sites as $site)
                 <div class="col-lg-3 mb-3 mb-lg-3">
-                    <div class="card" style="">
-                        <img alt="..." class="card-img-top" src="{{ asset($site->screenshot) }}" style="height: 250px;object-fit:cover;">
+                    <div class="card">
+
+                        <div style="position: relative;">
+                            <img alt="{{ $site->name }}" class="card-img-top" src="{{ asset($site->screenshot) }}" style="height: 250px; object-fit: cover; {{ $site->active == 0 ? 'filter:blur(2px);' : '' }}">
+
+                            @if ($site->active == 0)
+                                <div class="offline-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+                                    <span style="font-size: 24px; color: red; font-weight:bolder">
+                                        OFFLINE
+                                    </span>
+                                </div>
+                            @endif
+                        </div>
 
                         <div class="doptions">
                             <div class="dropdown">
@@ -69,8 +80,12 @@
                             <h5 class="card-title">{{ $site->name }}</h5>
                             <p class="card-text">
                                 <a href="{{ $site->url }}" target="_empty">{{ $site->url }}</a><br>
-                                card's
-                                content.
+                                @if ($site->active == 0)
+                                    <span style="color:red">Offline about {{ \Carbon\Carbon::parse($site->last_down)->diffForHumans() }} </span><br>
+                                @else
+                                    Last Changed about {{ \Carbon\Carbon::parse($site->last_change)->diffForHumans() }}<br>
+                                @endif
+                                Last Checked about {{ \Carbon\Carbon::parse($site->last_check)->diffForHumans() }}
                             </p>
                             <div class="d-flex ">
 

@@ -131,10 +131,12 @@ class FunctionController extends Controller
 
     public function checkSiteStatus(Request $request){
         $sites = DB::table('sitelist')->get();
+        $reports = '';
+        $counter = 0;
 
         foreach($sites as $site){
             if($site->tracking == 1){
-
+                $counter++;
                 try {
                     $res = Http::get($site->url);
 
@@ -145,7 +147,7 @@ class FunctionController extends Controller
 
                         $cleanHtml = $this->removeScriptsAndNonBodyContent($rawHtml);
 
-                        $shortenedHtml = substr($cleanHtml, 0, 200);
+                        $shortenedHtml = substr($cleanHtml, 0, env('CACHE_COUNT'));
 
                         $publicpath = $site->screenshot;
 
@@ -183,38 +185,51 @@ class FunctionController extends Controller
                                 'last_change' => $changeState == 1 ? Carbon::now()->toDateTimeString() : $site->last_change,
                                 'updated_at' => Carbon::now()->toDateTimeString(),
                             ]);
-                    } else {
-                        $status = 0;
-                        $count = $site->downcount;
-                        $count += 1;
 
-                        DB::table('sitelist')
-                            ->where('id', $site->id)
-                            ->update([
-                                'active' => $status,
-                                'last_down' => Carbon::now()->toDateTimeString(),
-                                'downcount' => $count,
-                                'updated_at' => Carbon::now()->toDateTimeString(),
-                            ]);
+                        $report = $counter . ". (ONLINE) " . $site->url;
+                        if($changeState == 1){
+                            $report .= ": Changes have been made";
+                        }
+                        $reports .= $report . PHP_EOL;
+                    } else {
+                        throw new \Exception('error fetch');
                     }
                 } catch (\Throwable $th) {
+
+                    $updatedowntime = $site->active == 1 ? '1' : '0';
+
                     $status = 0;
                     $count = $site->downcount;
                     $count += 1;
+
+                    if($site->last_down == null){
+                        $date = Carbon::now()->toDateTimeString();
+                    } else {
+                        $date = $site->last_down;
+                    }
 
                     DB::table('sitelist')
                         ->where('id', $site->id)
                         ->update([
                             'active' => $status,
-                            'last_down' => Carbon::now()->toDateTimeString(),
+                            'last_down' => $site->active == 1 ? Carbon::now()->toDateTimeString() : $date,
+                            'last_check' => Carbon::now()->toDateTimeString(),
                             'downcount' => $count,
                             'updated_at' => Carbon::now()->toDateTimeString(),
                         ]);
+
+                    $report = $counter . ". (OFFLINE) " . $site->url . " (" . $count . " attempts)";
+                    $reports .= $report . PHP_EOL;
                 }
-
-
             }
         }
+
+        DB::table('cronreport')
+            ->insert([
+                'report' => $reports,
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
+            ]);
 
         return redirect('?nt=4');
     }
@@ -302,5 +317,10 @@ class FunctionController extends Controller
             ]);
 
         return redirect('/?nt=7');
+    }
+
+
+    public function reportPage(Request $request){
+        return view('report');
     }
 }

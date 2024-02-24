@@ -22,3 +22,5 @@ Route::get('forceFetch', [FunctionController::class, 'checkSiteStatus'])->name('
 Route::get('resetScreenshot', [FunctionController::class, 'resetScreenshot'])->name('reset_screenshot');
 Route::get('changeTracking', [FunctionController::class, 'changeTracking'])->name('change_tracking');
 Route::get('clearCache', [FunctionController::class, 'clearCache'])->name('clear_cache');
+
+Route::get('report', [FunctionController::class, 'reportPage'])->name('report_page');
