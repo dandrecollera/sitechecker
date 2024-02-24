@@ -173,6 +173,22 @@ class FunctionController extends Controller
                             } else {
                                 $publicpath = asset('img/Untitled-1 cov.png');
                             }
+
+                            DB::table('imagehistory')
+                                ->insert([
+                                    'siteid' => $site->id,
+                                    'screenshot' => $publicpath,
+                                    'created_at' => Carbon::now()->toDateTimeString(),
+                                    'updated_at' => Carbon::now()->toDateTimeString(),
+                                ]);
+
+                            DB::table('cachehistory')
+                                ->insert([
+                                    'siteid' => $site->id,
+                                    'cache' =>$shortenedHtml,
+                                    'created_at' => Carbon::now()->toDateTimeString(),
+                                    'updated_at' => Carbon::now()->toDateTimeString(),
+                                ]);
                         }
 
                         DB::table('sitelist')
@@ -283,6 +299,14 @@ class FunctionController extends Controller
             ->where('id', $query['id'])
             ->update([
                 'screenshot' => $publicpath,
+                'updated_at' => Carbon::now()->toDateTimeString(),
+            ]);
+
+            DB::table('imagehistory')
+            ->insert([
+                'siteid' => $query['id'],
+                'screenshot' => $publicpath,
+                'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ]);
 
