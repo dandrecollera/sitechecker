@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class FunctionController extends Controller
 {
@@ -171,7 +172,11 @@ class FunctionController extends Controller
                             if($returnvar === 0){
                                 $publicpath = Storage::url($filename);
                             } else {
+                                $errorMessage = "Failed to generate screenshot for URL: {$site->url}. Error Code: $returnvar";
+                                Log::error($errorMessage);
+
                                 $publicpath = asset('img/Untitled-1 cov.png');
+
                             }
 
                             DB::table('imagehistory')
