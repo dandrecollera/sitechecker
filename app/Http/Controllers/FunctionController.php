@@ -283,10 +283,10 @@ class FunctionController extends Controller
             ->where('id', $query['id'])
             ->first();
 
-        $escapedUrl = escapeshellarg($sel->url);
-        $scriptPath = base_path('node_scripts/screenshot.js');
+        $escapedUrl = $sel->url;
+        $scriptPath = 'node_scripts/screenshot.js';
         $filename = 'screenshots/' . md5($sel->url) . '_' . date('YmdHis') . '.png';
-        $storagePath = storage_path('app/public/' . $filename);
+        $storagePath = 'storage/app/public/' . $filename;
 
         $directory = dirname($storagePath);
         if (!file_exists($directory)) {
