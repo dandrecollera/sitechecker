@@ -283,10 +283,10 @@ class FunctionController extends Controller
             ->where('id', $query['id'])
             ->first();
 
-        $escapedUrl = $sel->url;
-        $scriptPath = 'node_scripts/screenshot.js';
+        $escapedUrl = escapeshellarg($sel->url);
+        $scriptPath = base_path('node_scripts/screenshot.js');
         $filename = 'screenshots/' . md5($sel->url) . '_' . date('YmdHis') . '.png';
-        $storagePath = 'storage/app/public/' . $filename;
+        $storagePath = storage_path('app/public/' . $filename);
 
         $directory = dirname($storagePath);
         if (!file_exists($directory)) {
@@ -294,7 +294,7 @@ class FunctionController extends Controller
         }
 
 
-        $command = "node $scriptPath $escapedUrl $storagePath";
+        $command = "node $scriptPath $escapedUrl $storagePath 2>&1";
         Log::info("Executing command: $command");
 
         exec($command, $output, $returnvar);
