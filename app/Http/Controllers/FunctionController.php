@@ -294,7 +294,7 @@ class FunctionController extends Controller
         }
 
 
-        $command = "node $scriptPath $escapedUrl $storagePath 2>&1";
+        $command = "node $scriptPath $escapedUrl $storagePath";
         Log::info("Executing command: $command");
 
         exec($command, $output, $returnvar);
