@@ -8,6 +8,7 @@ async function takeScreenshot(url, path) {
         await page.goto(url, { waitUntil: "networkidle2" });
         await page.screenshot({ path: path });
         await browser.close();
+        console.log("Screenshot taken successfully");
         return true; // Return true if screenshot is taken successfully
     } catch (error) {
         console.error("Error while taking screenshot:", error);
