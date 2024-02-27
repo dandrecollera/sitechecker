@@ -299,12 +299,13 @@ class FunctionController extends Controller
 
         exec($command, $output, $returnvar);
 
-        Log::info($returnvar);
-        Log::info($output);
+        Log::info("Return Value: $returnvar");
+        Log::info("Output: " . implode("\n", $output));
 
         if($returnvar === 0){
             $publicpath = Storage::url($filename);
         } else {
+            Log::error("Error: Unable to take screenshot. Output: " . implode("\n", $output));
             $publicpath = asset('img/Untitled-1 cov.png');
         }
 
