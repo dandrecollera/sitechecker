@@ -11,8 +11,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class FunctionController extends Controller
 {
@@ -278,59 +276,55 @@ class FunctionController extends Controller
         return $stripHtml;
     }
 
-    public function resetScreenshot(Request $request)
-{
-    $query = $request->query();
+    public function resetScreenshot(Request $request){
+        $query = $request->query();
 
-    $sel = DB::table('sitelist')
-        ->where('id', $query['id'])
-        ->first();
+        $sel = DB::table('sitelist')
+            ->where('id', $query['id'])
+            ->first();
 
-    $escapedUrl = escapeshellarg($sel->url);
-    $scriptPath = base_path('node_scripts/screenshot.js');
-    $filename = 'screenshots/' . md5($sel->url) . '_' . now()->format('YmdHis') . '.png';
-    $storagePath = storage_path('app/public/' . $filename);
+        $escapedUrl = escapeshellarg($sel->url);
+        $scriptPath = base_path('node_scripts/screenshot.js');
+        $filename = 'screenshots/' . md5($sel->url) . '_' . date('YmdHis') . '.png';
+        $storagePath = storage_path('app/public/' . $filename);
 
-    $directory = dirname($storagePath);
-    if (!file_exists($directory)) {
-        mkdir($directory, 0777, true);
-    }
-
-    $command = "node $scriptPath $escapedUrl $storagePath";
-    Log::info("Executing command: $command");
-
-    try {
-        $process = new Process(explode(' ', $command));
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
+        $directory = dirname($storagePath);
+        if (!file_exists($directory)) {
+            mkdir($directory, 0777, true);
         }
 
-        $publicpath = Storage::url($filename);
+
+        $command = "node $scriptPath $escapedUrl $storagePath";
+        Log::info("Executing command: $command");
+
+        exec($command, $output, $returnvar);
+
+        Log::info($returnvar);
+        Log::info($output);
+
+        if($returnvar === 0){
+            $publicpath = Storage::url($filename);
+        } else {
+            $publicpath = asset('img/Untitled-1 cov.png');
+        }
 
         DB::table('sitelist')
             ->where('id', $query['id'])
             ->update([
                 'screenshot' => $publicpath,
-                'updated_at' => now(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
             ]);
 
-        DB::table('imagehistory')
+            DB::table('imagehistory')
             ->insert([
                 'siteid' => $query['id'],
                 'screenshot' => $publicpath,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
             ]);
 
         return redirect('/?nt=5');
-    } catch (ProcessFailedException $exception) {
-        Log::error('Error executing command: ' . $exception->getMessage());
-
-        return redirect('/?nt=5'); // Handle error as needed
     }
-}
 
     public function changeTracking(Request $request){
         $query = $request->query();
