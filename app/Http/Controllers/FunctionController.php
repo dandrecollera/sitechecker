@@ -169,6 +169,8 @@ class FunctionController extends Controller
 
                             exec($command, $output, $returnvar);
 
+                            Log::info($returnvar);
+
                             if($returnvar === 0){
                                 $publicpath = Storage::url($filename);
                             } else {
