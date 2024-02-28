@@ -373,9 +373,16 @@ class FunctionController extends Controller
 
     public function execTest(Request $request){
 
-        $execvar = shell_exec('php -v');
+        exec('php -v', $output, $returnvar);
 
-        print_r($execvar);
+        // Check if the command executed successfully
+        if ($returnvar !== 0) {
+            echo "Error occurred: $returnvar";
+            echo "Output: " . implode("\n", $output);
+        } else {
+            print_r($output);
+        }
 
+        print_r($_ENV);
     }
 }
