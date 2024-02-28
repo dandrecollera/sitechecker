@@ -362,7 +362,8 @@ class FunctionController extends Controller
     }
 
     public function execTest(Request $request){
-        exec('node -v', $output, $returnvar);
+        $command = "node /var/www/sitechecker/node_scripts/screenshot.js 'https://github.com/' /var/www/sitechecker/storage/app/public/screenshots/008ec4453ff31513f43893cba7aa31c8_20240227235037.png";
+        exec($command, $output, $returnvar);
         print_r($output);
         print_r($returnvar);
     }
