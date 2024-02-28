@@ -373,7 +373,7 @@ class FunctionController extends Controller
 
     public function execTest(Request $request){
 
-        exec('php -v', $output, $returnvar);
+        exec('node -v', $output, $returnvar);
 
         // Check if the command executed successfully
         if ($returnvar !== 0) {
