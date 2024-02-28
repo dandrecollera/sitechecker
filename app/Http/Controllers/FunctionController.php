@@ -362,14 +362,8 @@ class FunctionController extends Controller
     }
 
     public function execTest(Request $request){
-        // Set the PATH environment variable to include the directory containing the node binary
-        // Replace '/root/.nvm/versions/node/v21.6.2/bin' with the actual path to your node binary directory
-        $nodeBinaryDir = '/root/.nvm/versions/node/v21.6.2/bin';
-        $currentPath = getenv('PATH');
-        putenv("PATH=$nodeBinaryDir:$currentPath");
 
-        // Execute the node -v command
-        exec('node -v 2>&1', $output, $returnvar);
+        exec('node -v', $output, $returnvar);
 
         // Check if the command executed successfully
         if ($returnvar !== 0) {
