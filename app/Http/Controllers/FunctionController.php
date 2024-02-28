@@ -362,7 +362,7 @@ class FunctionController extends Controller
     }
 
     public function execTest(Request $request){
-        exec('/root/.nvm/versions/node/v20.11.1/bin/node -v', $output, $returnvar);
+        exec('node -v', $output, $returnvar);
         print_r($output);
         print_r($returnvar);
     }
