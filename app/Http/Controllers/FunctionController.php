@@ -372,13 +372,10 @@ class FunctionController extends Controller
     }
 
     public function execTest(Request $request){
-        $script = "node /var/www/sitechecker/node_scripts/screenshot.js 'https://discreetencounters.app' /var/www/sitechecker/storage/app/public/screenshots/942d247b57aa180d07f504a53204a8d7_20240228065123.png";
-        $script2 = "node /var/www/sitechecker/node_scripts/screenshot.js 'https://discreetencounters.app' /var/www/sitechecker/storage/app/public/screenshots/942d247b57aa180d07f504a53204a8d7_202402280651233.png";
+        $script = "node -v";
+        exec($script, $output, $returnvar);
 
-        $script3 = "node /var/www/sitechecker/node_scripts/test.js";
-        exec($script3, $output, $returnvar);
-
-        print_r(shell_exec($script3));
+        // print_r(shell_exec($script3));
         // Check if the command executed successfully
         if ($returnvar !== 0) {
             echo "Error occurred: $returnvar";
