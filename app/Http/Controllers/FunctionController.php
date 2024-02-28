@@ -362,8 +362,11 @@ class FunctionController extends Controller
     }
 
     public function execTest(Request $request){
-        exec('node -v', $output, $returnvar);
-        print_r($output);
-        print_r($returnvar);
+        exec('node -v 2>&1', $output, $returnvar);
+        if ($returnvar !== 0) {
+            echo "Error occurred: $returnvar";
+        } else {
+            print_r($output);
+        }
     }
 }
