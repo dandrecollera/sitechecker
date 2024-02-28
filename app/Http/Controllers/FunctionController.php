@@ -309,7 +309,7 @@ class FunctionController extends Controller
 
         exec($command, $output, $returnvar);
         Log::info("Return Value: $returnvar");
-        Log::info("Output: " . implode("\n", $output));
+        Log::info($output);
 
         if($returnvar === 0){
             $publicpath = Storage::url($filename);
