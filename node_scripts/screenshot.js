@@ -2,18 +2,36 @@ const puppeteer = require("puppeteer");
 
 async function takeScreenshot(url, path) {
     try {
-        console.log("Screenshot destination path:", path);
-        const browser = await puppeteer.launch();
+        console.log("Launching browser...");
+        const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
+        console.log("Browser launched successfully");
+
+        console.log("Opening new page...");
         const page = await browser.newPage();
+        console.log("New page opened successfully");
+
+        console.log("Setting viewport...");
         await page.setViewport({ width: 1366, height: 768 });
+        console.log("Viewport set successfully");
+
+        console.log("Navigating to URL:", url);
         await page.goto(url, { waitUntil: "networkidle2" });
+        console.log("Navigation to URL completed successfully");
+
+        console.log("Taking screenshot...");
         await page.screenshot({ path: path });
-        await browser.close();
         console.log("Screenshot taken successfully");
-        return true; // Return true if screenshot is taken successfully
+
+        console.log("Closing browser...");
+        await browser.close();
+        console.log("Browser closed successfully");
+
+        console.log("Screenshot saved to:", path);
+
+        return true;
     } catch (error) {
         console.error("Error while taking screenshot:", error);
-        return false; // Return false if an error occurs
+        return false;
     }
 }
 
