@@ -3,7 +3,10 @@ const puppeteer = require("puppeteer");
 async function takeScreenshot(url, path) {
     try {
         console.log("Launching browser...");
-        const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
+        const browser = await puppeteer.launch({
+            headless: false,
+            args: ["--no-sandbox"],
+        });
         console.log("Browser launched successfully");
 
         console.log("Opening new page...");
