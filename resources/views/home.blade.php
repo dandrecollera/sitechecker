@@ -45,7 +45,7 @@
 
         <div class="row">
             @foreach ($sites as $site)
-                <div class="col-lg-3 mb-3 mb-lg-3">
+                <div class="col-lg-2 col-md-3 mb-3 mb-lg-3">
                     <div class="card">
 
                         <div style="position: relative;">
@@ -121,7 +121,7 @@
     </div>
 
     <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="exampleModal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Add Website</h1>
@@ -164,7 +164,7 @@
     </div>
 
     <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="editwebsite" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Website</h1>
@@ -209,7 +209,7 @@
     </div>
 
     <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="deletesite" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Website</h1>
@@ -230,7 +230,7 @@
     </div>
 
     <div class="modal fade" id="forcemodal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Force Fetch</h1>

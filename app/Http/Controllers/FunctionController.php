@@ -22,6 +22,7 @@ class FunctionController extends Controller
         $data['errors'] = array(
             1 => ['Error: Enter a valid Title', 'danger'],
             2 => ['Error: Enter a valid Web URL', 'danger'],
+            3 => ['Error: Duplicated URL', 'danger'],
         );
         if(!empty($query['err'])){
             $data['err'] = $query['err'];
@@ -82,6 +83,15 @@ class FunctionController extends Controller
             die();
         }
 
+
+        $checkcurrent = DB::table('sitelist')
+            ->where('name', $input['webtitle'])
+            ->orWhere('url', $input['weburl'])
+            ->count();
+
+        if($checkcurrent > 0){
+            return redirect('?err=3');
+        }
 
         DB::table('sitelist')
             ->insert([
@@ -372,5 +382,7 @@ class FunctionController extends Controller
         } else {
             print_r($output);
         }
+
+        print_r($_ENV);
     }
 }
