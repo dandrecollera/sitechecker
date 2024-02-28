@@ -307,9 +307,15 @@ class FunctionController extends Controller
         $command = "node $scriptPath $escapedUrl $storagePath";
         Log::info("Executing command: $command");
 
-        exec($command, $output, $returnvar);
-        Log::info("Return Value: $returnvar");
-        Log::info($output);
+        $process = new Process($command);
+        $process->run();
+
+        if ($process->isSuccessful()) {
+            $publicpath = Storage::url($filename);
+        } else {
+            Log::error("Error: Unable to take screenshot. Output: " . $process->getErrorOutput());
+            $publicpath = asset('img/Untitled-1 cov.png');
+        }
 
         if($returnvar === 0){
             $publicpath = Storage::url($filename);
