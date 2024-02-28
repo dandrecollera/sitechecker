@@ -24,3 +24,5 @@ Route::get('changeTracking', [FunctionController::class, 'changeTracking'])->nam
 Route::get('clearCache', [FunctionController::class, 'clearCache'])->name('clear_cache');
 
 Route::get('report', [FunctionController::class, 'reportPage'])->name('report_page');
+Route::get('exectest', [FunctionController::class, 'execTest'])->name('execTest');
+

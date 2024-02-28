@@ -298,7 +298,6 @@ class FunctionController extends Controller
         Log::info("Executing command: $command");
 
         exec($command, $output, $returnvar);
-
         Log::info("Return Value: $returnvar");
         Log::info("Output: " . implode("\n", $output));
 
@@ -360,5 +359,11 @@ class FunctionController extends Controller
 
     public function reportPage(Request $request){
         return view('report');
+    }
+
+    public function execTest(Request $request){
+        exec('node -v', $output, $returnvar);
+        print_r($output);
+        print_r($returnvar);
     }
 }
