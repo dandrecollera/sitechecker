@@ -373,16 +373,7 @@ class FunctionController extends Controller
 
     public function execTest(Request $request){
 
-        shell_exec('node -v');
+        print_r(shell_exec('node -v'));
 
-        // Check if the command executed successfully
-        if ($returnvar !== 0) {
-            echo "Error occurred: $returnvar";
-            echo "Output: " . implode("\n", $output);
-        } else {
-            print_r($output);
-        }
-
-        print_r($_ENV);
     }
 }
