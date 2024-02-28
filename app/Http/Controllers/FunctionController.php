@@ -373,7 +373,7 @@ class FunctionController extends Controller
 
     public function execTest(Request $request){
 
-        $execvar = shell_exec('node -v');
+        $execvar = shell_exec('php -v');
 
         print_r($execvar);
 
