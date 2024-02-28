@@ -2,7 +2,8 @@ const puppeteer = require("puppeteer");
 
 async function takeScreenshot(url, path) {
     try {
-        const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
+        console.log("Screenshot destination path:", path);
+        const browser = await puppeteer.launch();
         const page = await browser.newPage();
         await page.setViewport({ width: 1366, height: 768 });
         await page.goto(url, { waitUntil: "networkidle2" });
