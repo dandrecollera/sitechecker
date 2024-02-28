@@ -362,7 +362,7 @@ class FunctionController extends Controller
     }
 
     public function execTest(Request $request){
-        exec('node -v 2>&1', $output, $returnvar);
+        exec('/root/.nvm/versions/node/v21.6.2/bin/node -v 2>&1', $output, $returnvar);
         if ($returnvar !== 0) {
             echo "Error occurred: $returnvar";
         } else {
