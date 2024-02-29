@@ -303,7 +303,7 @@ class FunctionController extends Controller
             return redirect('/?nt=5')->with('error', 'Failed to reset screenshot.');
         }
 
-        return redirect('/?nt=5');
+        // return redirect('/?nt=5');
     }
 
 //     public function resetScreenshot(\Illuminate\Http\Request $request)
