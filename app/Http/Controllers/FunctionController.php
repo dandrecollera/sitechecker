@@ -307,15 +307,9 @@ class FunctionController extends Controller
         $command = "node $scriptPath $escapedUrl $storagePath";
         Log::info("Executing command: $command");
 
-        $process = new Process($command);
-        $process->run();
-
-        if ($process->isSuccessful()) {
-            $publicpath = Storage::url($filename);
-        } else {
-            Log::error("Error: Unable to take screenshot. Output: " . $process->getErrorOutput());
-            $publicpath = asset('img/Untitled-1 cov.png');
-        }
+        exec($command, $output, $returnvar);
+        Log::info("Return Value: $returnvar");
+        Log::info($output);
 
         if($returnvar === 0){
             $publicpath = Storage::url($filename);
@@ -341,6 +335,61 @@ class FunctionController extends Controller
 
         return redirect('/?nt=5');
     }
+
+//     public function resetScreenshot(\Illuminate\Http\Request $request)
+// {
+//     $query = $request->query();
+
+//     $sel = DB::table('sitelist')
+//         ->where('id', $query['id'])
+//         ->first();
+
+//     $escapedUrl = escapeshellarg($sel->url);
+//     $scriptPath = base_path('node_scripts/screenshot.js');
+//     $filename = 'screenshots/' . md5($sel->url) . '_' . date('YmdHis') . '.png';
+//     $storagePath = storage_path('app/public/' . $filename);
+
+//     $directory = dirname($storagePath);
+//     if (!file_exists($directory)) {
+//         mkdir($directory, 0777, true);
+//     }
+
+//     $command = [
+//         'node',
+//         $scriptPath,
+//         $escapedUrl,
+//         $storagePath
+//     ];
+
+//     Log::info("Executing command: " . implode(' ', $command));
+
+//     $process = new Process($command);
+//     $process->run();
+
+//     if ($process->isSuccessful()) {
+//         $publicpath = Storage::url($filename);
+//     } else {
+//         Log::error("Error: Unable to take screenshot. Output: " . $process->getErrorOutput());
+//         $publicpath = asset('img/Untitled-1 cov.png');
+//     }
+
+//     DB::table('sitelist')
+//         ->where('id', $query['id'])
+//         ->update([
+//             'screenshot' => $publicpath,
+//             'updated_at' => Carbon::now()->toDateTimeString(),
+//         ]);
+
+//     DB::table('imagehistory')
+//         ->insert([
+//             'siteid' => $query['id'],
+//             'screenshot' => $publicpath,
+//             'created_at' => Carbon::now()->toDateTimeString(),
+//             'updated_at' => Carbon::now()->toDateTimeString(),
+//         ]);
+
+//     return redirect('/?nt=5');
+// }
 
     public function changeTracking(Request $request){
         $query = $request->query();
