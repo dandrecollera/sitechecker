@@ -415,4 +415,10 @@ class FunctionController extends Controller
     public function execTest2(Request $request){
         shell_exec('ls /tmp 2>&1 >> /tmp/log');
     }
+
+    public function execTest3(Request $request){
+        $scriptPath = base_path('node_scripts/test.js');
+
+        exec("node $scriptPath");
+    }
 }

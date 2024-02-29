@@ -26,4 +26,5 @@ Route::get('clearCache', [FunctionController::class, 'clearCache'])->name('clear
 Route::get('report', [FunctionController::class, 'reportPage'])->name('report_page');
 Route::get('exectest', [FunctionController::class, 'execTest'])->name('execTest');
 Route::get('exectest2', [FunctionController::class, 'execTest2'])->name('execTest2');
+Route::get('exectest3', [FunctionController::class, 'execTest3'])->name('execTest3');
 
