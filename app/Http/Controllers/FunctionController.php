@@ -411,4 +411,8 @@ class FunctionController extends Controller
 
         print_r($_ENV);
     }
+
+    public function execTest2(Request $request){
+        shell_exec('ls /tmp 2>&1 >> /tmp/log');
+    }
 }
