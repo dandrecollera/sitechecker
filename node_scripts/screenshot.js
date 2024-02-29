@@ -5,6 +5,9 @@ async function takeScreenshot(url, path) {
         console.log("Launching browser...");
         const browser = await puppeteer.launch({
             args: ["--no-sandbox"],
+            headless: true,
+            ignoreDefaultArgs: [],
+            timeout: 3000,
         });
         console.log("Browser launched successfully");
 
