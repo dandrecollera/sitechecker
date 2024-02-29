@@ -41,6 +41,9 @@ class ResetScreenshotCommand extends Command
 
         exec($command, $output, $returnVar);
 
+        Log::info("Return Value: $returnVar");
+        Log::info($output);
+
         if ($returnVar === 0) {
             $publicPath = Storage::url($filename);
 
