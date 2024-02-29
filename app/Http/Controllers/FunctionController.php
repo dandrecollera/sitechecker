@@ -397,7 +397,7 @@ class FunctionController extends Controller
     }
 
     public function execTest(Request $request){
-        $script = "node -v";
+        $script = "whoami";
         exec($script, $output, $returnvar);
 
         // print_r(shell_exec($script3));
