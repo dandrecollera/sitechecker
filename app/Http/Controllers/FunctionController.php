@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Artisan;
 
 class FunctionController extends Controller
 {
@@ -293,45 +294,14 @@ class FunctionController extends Controller
             ->where('id', $query['id'])
             ->first();
 
-        $escapedUrl = escapeshellarg($sel->url);
-        $scriptPath = base_path('node_scripts/screenshot.js');
-        $filename = 'screenshots/' . md5($sel->url) . '_' . date('YmdHis') . '.png';
-        $storagePath = storage_path('app/public/' . $filename);
-
-        $directory = dirname($storagePath);
-        if (!file_exists($directory)) {
-            mkdir($directory, 0777, true);
+        try{
+            Artisan::call('screenshot:reset', ['id' => $sel->id]);
+            $output = Artisan::output();
+            Log::info("Reset screenshot for site with ID $id: $output");
+        } catch(\Exception $e){
+            Log::error("Error resetting screenshot for site with ID $id: " . $e->getMessage());
+            return redirect('/?nt=5')->with('error', 'Failed to reset screenshot.');
         }
-
-
-        $command = "node $scriptPath $escapedUrl $storagePath";
-        Log::info("Executing command: $command");
-
-        exec($command, $output, $returnvar);
-        Log::info("Return Value: $returnvar");
-        Log::info($output);
-
-        if($returnvar === 0){
-            $publicpath = Storage::url($filename);
-        } else {
-            Log::error("Error: Unable to take screenshot. Output: " . implode("\n", $output));
-            $publicpath = asset('img/Untitled-1 cov.png');
-        }
-
-        DB::table('sitelist')
-            ->where('id', $query['id'])
-            ->update([
-                'screenshot' => $publicpath,
-                'updated_at' => Carbon::now()->toDateTimeString(),
-            ]);
-
-            DB::table('imagehistory')
-            ->insert([
-                'siteid' => $query['id'],
-                'screenshot' => $publicpath,
-                'created_at' => Carbon::now()->toDateTimeString(),
-                'updated_at' => Carbon::now()->toDateTimeString(),
-            ]);
 
         return redirect('/?nt=5');
     }
