@@ -297,9 +297,9 @@ class FunctionController extends Controller
         try{
             Artisan::call('screenshot:reset', ['id' => $sel->id]);
             $output = Artisan::output();
-            Log::info("Reset screenshot for site with ID $id: $output");
+            Log::info("Reset screenshot for site with ID $sel->id: $output");
         } catch(\Exception $e){
-            Log::error("Error resetting screenshot for site with ID $id: " . $e->getMessage());
+            Log::error("Error resetting screenshot for site with ID $sel->id: " . $e->getMessage());
             return redirect('/?nt=5')->with('error', 'Failed to reset screenshot.');
         }
 
